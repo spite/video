@@ -5,7 +5,7 @@ const gum = new Gum(
   document.querySelector("#nextDeviceBtn")
 );
 
-const isVertical = true;
+const isVertical = !true;
 const size = 2;
 const lagBuffer = [];
 const canvas = document.getElementById("photo");
@@ -23,9 +23,9 @@ function gotStream() {
 
   console.log(video.videoWidth, video.videoHeight);
   lagFrames = (isVertical ? video.videoHeight : video.videoWidth) / size;
-  for (var j = 0; j < lagFrames; j++) {
-    var c = document.createElement("canvas");
-    var ctx = c.getContext("2d");
+  for (let j = 0; j < lagFrames; j++) {
+    const c = document.createElement("canvas");
+    const ctx = c.getContext("2d");
     lagBuffer.push({ canvas: c, ctx: ctx });
   }
 
@@ -43,7 +43,7 @@ function gotStream() {
     canvas.height
   );
 
-  for (var j = 0; j < lagBuffer.length; j++) {
+  for (let j = 0; j < lagBuffer.length; j++) {
     lagBuffer[j].canvas.width = video.videoWidth;
     lagBuffer[j].canvas.height = video.videoHeight;
 
@@ -63,16 +63,6 @@ function gotStream() {
   onResize();
 
   snapshotLagged();
-}
-
-function noStream() {
-  document.getElementById("message").innerHTML =
-    '<span class="error">No camera available.</span> Please allow the page access to your camera.';
-}
-
-function streamError() {
-  document.getElementById("message").innerHTML =
-    '<span class="error">Camera error.</span> Something went very wrong :(';
 }
 
 function mod(a, n) {
@@ -115,11 +105,11 @@ function snapshotLagged() {
       const i = lagBuffer[p].canvas;
       context.drawImage(
         i,
-        x,
+        x * size,
         0,
         size,
         video.videoHeight,
-        x,
+        x * size,
         0,
         size,
         canvas.height
