@@ -17,8 +17,6 @@ canvas.width = 0;
 document.body.appendChild(canvas);
 
 function gotStream() {
-  document.getElementById("message").hidden = true;
-
   const video = gum.video;
 
   console.log(video.videoWidth, video.videoHeight);
