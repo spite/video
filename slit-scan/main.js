@@ -5,7 +5,7 @@ const gum = new Gum(
   document.querySelector("#nextDeviceBtn")
 );
 
-const isVertical = !true;
+const isVertical = true;
 const size = 2;
 const lagBuffer = [];
 const canvas = document.getElementById("photo");
