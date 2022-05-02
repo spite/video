@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>Slit-Scan with WebRTC Demo</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <link
+      href="http://fonts.googleapis.com/css?family=Open+Sans:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+      h1 {
+        font-family: "Open Sans", sans-serif;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+      }
+      h2 {
+        font-family: "Open Sans", sans-serif;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+        font-size: 12px;
+        margin-top: 2em;
+      }
+      * {
+        font-family: "Open Sans", sans-serif;
+        font-size: 12px;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        color: #eee;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2),
+          0 -1px 0 rgba(0, 0, 0, 0.2);
+      }
+      body {
+        background: #222 url(low_contrast_linen.png);
+        padding: 20px;
+      }
+      video {
+        -webkit-transform: scaleX(1);
+        -o-transform: scaleX(1);
+        display: none;
+      }
+      p {
+        font-size: 12px;
+        margin-bottom: 0.5em;
+        line-height: 1.4em;
+      }
+      canvas {
+      }
+      #photo {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 640px;
+        height: 480px;
+        margin-left: -320px;
+        margin-top: -240px;
+      }
+      .error {
+        color: #ee0011;
+        font-weight: bold;
+      }
+      #intro {
+        z-index: 100;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 10px;
+        border-radius: 5px;
+        width: 350px;
+      }
+    </style>
+  </head>
+  <body>
+    <article>
+      <div id="intro">
+        <h1>Slit-Scan with WebRTC Demo</h1>
+        <p>
+          An experiment with
+          <a
+            href="http://en.wikipedia.org/wiki/Slit-scan_photography"
+            rel="external"
+            >slit-scan photography</a
+          >
+          technique<br />applied to video using WebRTC getUserMedia.
+        </p>
+        <p>
+          Code by <a href="http://www.twitter.com/thespite">Jaume Sanchez</a>.
+        </p>
+        <p id="message">Loading...</p>
+        <p>
+          <span id="device"></span>&nbsp;
+          <button id="nextDeviceBtn">Next</button>
+        </p>
+      </div>
+      <section id="app" hidden>
+        <video id="monitor" autoplay></video>
+        <canvas id="photo"></canvas>
+      </section>
+      <script src="./main.js" type="module"></script>
+    </article>
+  </body>
+</html>
