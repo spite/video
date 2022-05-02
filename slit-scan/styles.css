@@ -1,0 +1,15 @@
+@import url("../styles.css");
+
+body {
+  background-color: black;
+}
+
+#photo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 640px;
+  height: 480px;
+  margin-left: -320px;
+  margin-top: -240px;
+}
