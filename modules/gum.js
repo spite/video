@@ -26,7 +26,9 @@ class Gum {
 
   async init() {
     await this.enumerateDevices();
-    if (this.devices.videoinput.length === 1) {
+    if (this.devices.videoinput.length === 0) {
+      this.deviceNameLabel.textContent = `No video devices found. Please make sure to allow access if there are any present.`;
+    } else if (this.devices.videoinput.length === 1) {
       this.nextDeviceButton.style.display = "none";
       this.currentVideoInput = 0;
       this.invalidateVideoSource();
@@ -54,15 +56,16 @@ class Gum {
       let name;
       switch (device.kind) {
         case "audioinput":
-          name = device.label || "Microphone";
+          name = device.label || "Audio input";
           break;
         case "audiooutput":
-          name = device.label || "Speakers";
+          name = device.label || "Audio output";
           break;
         case "videoinput":
-          name = device.label || "Camera";
+          name = device.label || "Video input";
           break;
       }
+      device.name = name;
       this.devices[device.kind].push(device);
     }
   }
@@ -81,17 +84,16 @@ class Gum {
     this.deviceNameLabel.textContent = "Connecting...";
     let stream = null;
 
+    const name = device.name;
     try {
       stream = await navigator.mediaDevices.getUserMedia(constraints);
       this.deviceNameLabel.style.color = "inherit";
-      this.deviceNameLabel.textContent = device.label
-        ? device.label
-        : "Unlabeled camera";
+      this.deviceNameLabel.textContent = name;
       this.createVideoElement();
       this.video.srcObject = stream;
     } catch (err) {
       this.deviceNameLabel.style.color = "#b70000";
-      this.deviceNameLabel.textContent = `${err.name} ${err.message}`;
+      this.deviceNameLabel.textContent = `${name} - ${err.name}: ${err.message}`;
     }
   }
 
