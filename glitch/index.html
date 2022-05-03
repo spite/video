@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Slit-scan</title>
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@thespite" />
+    <meta name="twitter:title" content="Slit-scan" />
+    <meta
+      name="twitter:description"
+      content="An experiment simulating video compression glitches to a video using WebRTC getUserMedia"
+    />
+    <meta name="twitter:creator" content="@thespite" />
+    <meta
+      name="twitter:image:src"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-28.jpg"
+    />
+
+    <!-- Open Graph data -->
+    <meta property="og:type" content="demo" />
+    <meta
+      property="og:image"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-28.jpg"
+    />
+    <meta
+      property="og:description"
+      content="An experiment simulating video compression glitches to a video using WebRTC getUserMedia"
+    />
+    <meta property="og:site_name" content="Clicktorelease" />
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <link href="./styles.css" rel="stylesheet" />
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "../modules/three.js",
+          "oflow": "../modules/oflow.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="info">
+      <h2>WebRTC getUserMedia</h2>
+      <h1>Optical Flow Glitch</h1>
+      <p>
+        An experiment simulating video compression glitches<br />using WebRTC
+        getUserMedia, optical flow and GLSL shaders.
+      </p>
+      <p>
+        Made using <a href="https://threejs.org/">three.js</a> and
+        <a href="https://github.com/anvaka/oflow">oflow.js</a>.
+      </p>
+      <p>
+        <span id="device"></span>&nbsp;
+        <button id="nextDeviceBtn">Next</button>
+      </p>
+    </div>
+    <footer>
+      <p><button>Prev</button><button>Next</button></p>
+    </footer>
+    <canvas id="photo"></canvas>
+    <canvas id="fcanvas"></canvas>
+    <div id="container"></div>
+  </body>
+  <script src="main.js" type="module"></script>
+</html>
