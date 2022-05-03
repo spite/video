@@ -2,6 +2,7 @@ class Gum {
   constructor(deviceNameElement, nextDeviceButton) {
     this.deviceNameLabel = deviceNameElement;
     this.nextDeviceButton = nextDeviceButton;
+    this.nextDeviceButton.style.display = "none";
     this.currentVideoInput = 0;
     this.devices = {
       audioinput: [],
@@ -82,12 +83,14 @@ class Gum {
 
     try {
       stream = await navigator.mediaDevices.getUserMedia(constraints);
+      this.deviceNameLabel.style.color = "inherit";
       this.deviceNameLabel.textContent = device.label
         ? device.label
         : "Unlabeled camera";
       this.createVideoElement();
       this.video.srcObject = stream;
     } catch (err) {
+      this.deviceNameLabel.style.color = "#b70000";
       this.deviceNameLabel.textContent = `${err.name} ${err.message}`;
     }
   }
