@@ -23,7 +23,8 @@ html {
   border-radius: 1em;
 }
 
-#info a {
+#info a,
+footer a {
   color: inherit;
 }
 
@@ -61,6 +62,7 @@ html {
   margin-bottom: 1em;
 }
 
+footer button,
 #info button {
   color: inherit;
   cursor: pointer;
@@ -87,4 +89,14 @@ button:hover,
 
 #info a {
   pointer-events: auto;
+}
+
+footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 2em;
+  z-index: 10;
+  color: white;
+  text-shadow: 1px 1px black;
 }
