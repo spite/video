@@ -29,33 +29,10 @@ function gotStream() {
 
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  context.drawImage(
-    video,
-    0,
-    0,
-    video.videoWidth,
-    video.videoHeight,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
 
   for (let j = 0; j < lagBuffer.length; j++) {
     lagBuffer[j].canvas.width = video.videoWidth;
     lagBuffer[j].canvas.height = video.videoHeight;
-
-    lagBuffer[j].ctx.drawImage(
-      video,
-      0,
-      0,
-      video.videoWidth,
-      video.videoHeight,
-      0,
-      0,
-      lagBuffer[j].canvas.width,
-      lagBuffer[j].canvas.height
-    );
   }
   scanline = 0;
   onResize();
