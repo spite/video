@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Optical flow with WebRTC getUserMedia</title>
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@thespite" />
+    <meta
+      name="twitter:title"
+      content="Optical flow with WebRTC getUserMedia"
+    />
+    <meta
+      name="twitter:description"
+      content="An experiment with optical flow and WebRTC getUserMedia."
+    />
+    <meta name="twitter:creator" content="@thespite" />
+    <meta
+      name="twitter:image:src"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-28.jpg"
+    />
+
+    <!-- Open Graph data -->
+    <meta property="og:type" content="demo" />
+    <meta
+      property="og:image"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-28.jpg"
+    />
+    <meta
+      property="og:description"
+      content="An experiment with optical flow and WebRTC getUserMedia."
+    />
+    <meta property="og:site_name" content="Clicktorelease" />
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <link href="./styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="info">
+      <h2>WebRTC getUserMedia</h2>
+      <h1>Optical Flow particle</h1>
+      <p>
+        Coded by
+        <a href="http://www.twitter.com/thespite" rel="external"
+          >Jaume Sanchez</a
+        >
+        for the
+        <a
+          href="https://developer.mozilla.org/en-US/demos/devderby"
+          rel="external"
+          >Mozilla May Dev Derby</a
+        >.
+      </p>
+      <p>
+        An experiment using WebRTC's getUserMedia feature to access<br />the
+        user's webcam and perform some effects using
+        <a href="http://en.wikipedia.org/wiki/Optical_flow" rel="external"
+          >optical flow</a
+        >.
+      </p>
+      <p>
+        Made with
+        <a href="https://github.com/anvaka/oflow" rel="external">oflow.js</a>
+        and <a href="https://threejs.org/" rel="external">three.js</a>.
+      </p>
+      <p>
+        <span id="device"></span>&nbsp;
+        <button id="nextDeviceBtn">Next</button>
+      </p>
+      <div id="instructions">
+        Select one of the presets:<br />
+        <ul class="cf">
+          <li><a href="#" class="modeSwitch" data-mode="1">Canvas</a></li>
+          <li>
+            <a href="#" class="modeSwitch" data-mode="2">WebGL particles</a>
+          </li>
+          <li>
+            <a href="#" class="modeSwitch" data-mode="3">WebGL particles II</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <footer>
+      <p><button>Prev</button><button>Next</button></p>
+    </footer>
+    <canvas id="photo"></canvas>
+    <canvas id="fcanvas"></canvas>
+    <div id="container"></div>
+  </body>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../modules/three.js",
+        "oflow": "../modules/oflow.js"
+      }
+    }
+  </script>
+  <script src="../modules/utils.js" type="module"></script>
+  <script src="main.js" type="module"></script>
+</html>
