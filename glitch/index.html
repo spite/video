@@ -42,8 +42,15 @@
         getUserMedia, optical flow and GLSL shaders .
       </p>
       <p>
-        Made using <a href="https://threejs.org/">three.js</a> and
-        <a href="https://github.com/anvaka/oflow">oflow.js</a>.
+        Made using
+        <a rel="external" href="https://threejs.org/">three.js</a> and
+        <a rel="external" href="https://github.com/anvaka/oflow">oflow.js</a>.
+      </p>
+      <p>
+        Get the source code on
+        <a rel="external" href="https://github.com/spite/video/tree/main/glitch"
+          >GitHub</a
+        >.
       </p>
       <p>
         <span id="device"></span>&nbsp;
@@ -55,18 +62,19 @@
     </footer>
     <canvas id="photo"></canvas>
     <div id="container"></div>
-    <script
-      async
-      src="https://unpkg.com/es-module-shims@1.5.4/dist/es-module-shims.js"
-    ></script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "../modules/three.js",
-          "oflow": "../modules/oflow.js"
-        }
-      }
-    </script>
-    <script src="main.js" type="module"></script>
   </body>
+  <script
+    async
+    src="https://unpkg.com/es-module-shims@1.5.4/dist/es-module-shims.js"
+  ></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../modules/three.js",
+        "oflow": "../modules/oflow.js"
+      }
+    }
+  </script>
+  <script src="../modules/utils.js" type="module"></script>
+  <script src="main.js" type="module"></script>
 </html>
