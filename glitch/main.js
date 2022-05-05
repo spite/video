@@ -5,49 +5,36 @@ import {
   PlaneBufferGeometry,
   RawShaderMaterial,
   VideoTexture,
-  LinearFilter,
-  NearestFilter,
   RGBAFormat,
   FloatType,
   Mesh,
   DataTexture,
   GLSL3,
 } from "three";
-import { FlowCalculator } from "oflow";
 import { vertexShader, fragmentShader } from "./shaders.js";
-import { Gum } from "../modules/gum.js";
+import { init as initGum, extractDifferences, scale } from "./oflowcam.js";
 
-const gum = new Gum(
-  document.querySelector("#device"),
-  document.querySelector("#nextDeviceBtn")
-);
-
-const scale = 2;
+let video;
 
 const container = document.getElementById("container");
 
-const canvas = document.getElementById("photo");
-const context = canvas.getContext("2d");
-const oCanvas = document.createElement("canvas");
-const oCtx = oCanvas.getContext("2d");
-const tCanvas = document.createElement("canvas");
-const tCtx = tCanvas.getContext("2d");
-
 let offsets;
 let momentum;
-let offsetTexture;
 let oW;
 let oH;
 
-const videoTexture = new VideoTexture(gum.video);
-videoTexture.minFilter = NearestFilter;
-videoTexture.magFilter = LinearFilter;
-
-canvas.width = 0;
-const flow = new FlowCalculator(scale / 4);
-let startTime;
+function initOffsets(w, h) {
+  oW = w;
+  oH = h;
+  momentum = new Float32Array(w * h * 4);
+  offsets = new Float32Array(w * h * 4);
+  const offsetTexture = new DataTexture(offsets, w, h, RGBAFormat, FloatType);
+  offsetTexture.flipY = true;
+  mesh.material.uniforms.offsetMap.value = offsetTexture;
+}
 
 const renderer = new WebGLRenderer();
+renderer.setPixelRatio(window.devicePixelRatio);
 container.appendChild(renderer.domElement);
 
 const scene = new Scene();
@@ -67,8 +54,8 @@ const mesh = new Mesh(
   new PlaneBufferGeometry(1, 1),
   new RawShaderMaterial({
     uniforms: {
-      map: { value: videoTexture },
-      offsetMap: { value: offsetTexture },
+      map: { value: null },
+      offsetMap: { value: null },
     },
     vertexShader,
     fragmentShader,
@@ -79,8 +66,15 @@ const mesh = new Mesh(
 scene.add(mesh);
 
 function start() {
-  startTime = Date.now();
-  extractDifferences();
+  processFrame();
+}
+
+function processFrame() {
+  const { d, f } = extractDifferences();
+  if (d) {
+    update(d);
+  }
+  requestAnimationFrame(processFrame);
 }
 
 function update(d) {
@@ -103,78 +97,12 @@ function update(d) {
     offsets[ptr + 1] *= 0.5;
   }
 
-  offsetTexture.needsUpdate = true;
-  videoTexture.needsUpdate = true;
+  mesh.material.uniforms.offsetMap.value.needsUpdate = true;
+  mesh.material.uniforms.map.value.needsUpdate = true;
   renderer.render(scene, camera);
 }
 
-function initOffsets(w, h) {
-  oW = w;
-  oH = h;
-  momentum = new Float32Array(w * h * 4);
-  offsets = new Float32Array(w * h * 4);
-  offsetTexture = new DataTexture(offsets, w, h, RGBAFormat, FloatType);
-  offsetTexture.flipY = true;
-  mesh.material.uniforms.offsetMap.value = offsetTexture;
-}
-
-function extractDifferences() {
-  const video = gum.video;
-  if (
-    canvas.width != video.videoWidth / scale ||
-    canvas.height != video.videoHeight / scale
-  ) {
-    canvas.width = oCanvas.width = tCanvas.width = video.videoWidth / scale;
-    canvas.height = oCanvas.height = tCanvas.height = video.videoHeight / scale;
-    initOffsets(canvas.width / scale, canvas.height / scale);
-    onResize();
-  }
-
-  let iData;
-  let oData;
-
-  try {
-    context.drawImage(
-      video,
-      0,
-      0,
-      video.videoWidth,
-      video.videoHeight,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-    if (canvas.width > 0 && canvas.height > 0) {
-      tCtx.drawImage(canvas, 0, 0);
-    }
-
-    iData = context.getImageData(0, 0, canvas.width, canvas.height);
-    oData = oCtx.getImageData(0, 0, oCanvas.width, oCanvas.height);
-  } catch (e) {
-    requestAnimationFrame(extractDifferences);
-    return;
-  }
-
-  const buf8 = new Uint8ClampedArray(iData.data);
-  const oBuf8 = new Uint8ClampedArray(oData.data);
-
-  const d = flow.calculate(buf8, oBuf8, canvas.width, canvas.height);
-
-  const currentTime = Date.now();
-  const eTime = currentTime - startTime;
-  startTime = currentTime;
-  const f = eTime / 16;
-
-  update(d, f);
-
-  oCtx.drawImage(tCanvas, 0, 0);
-
-  requestAnimationFrame(extractDifferences);
-}
-
 function onResize() {
-  const video = gum.video;
   var ar = window.innerHeight / window.innerWidth;
   var cr = video.videoHeight / video.videoWidth;
   var w, h;
@@ -199,8 +127,11 @@ function onResize() {
 }
 
 async function init() {
-  await gum.init();
-  await gum.ready();
+  video = await initGum(2, initOffsets);
+
+  const videoTexture = new VideoTexture(video);
+  mesh.material.uniforms.map.value = videoTexture;
+
   window.addEventListener("resize", onResize);
   onResize();
   start();
