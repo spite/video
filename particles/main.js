@@ -50,20 +50,6 @@ function start() {
   extractDifferences();
 }
 
-function noStream() {
-  message.innerHTML =
-    '<span class="error">No camera available.</span> Please allow the page access to your camera.';
-}
-
-function streamError() {
-  message.innerHTML =
-    '<span class="error">Camera error.</span> Something went very wrong :(';
-}
-
-function fastAbs(value) {
-  return (value ^ (value >> 31)) - (value >> 31);
-}
-
 function updateCanvas(d, f) {
   var min = 2;
   var maxLife = 100;
