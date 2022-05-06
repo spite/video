@@ -12,7 +12,11 @@ import {
   GLSL3,
 } from "three";
 import { vertexShader, fragmentShader } from "./shaders.js";
-import { init as initGum, extractDifferences, scale } from "./oflowcam.js";
+import {
+  init as initGum,
+  extractDifferences,
+  scale,
+} from "../modules/oflowcam.js";
 
 let video;
 

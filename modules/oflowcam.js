@@ -1,5 +1,5 @@
 import { FlowCalculator } from "oflow";
-import { Gum } from "../modules/gum.js";
+import { Gum } from "./gum.js";
 
 let flow;
 let scale = 2;
