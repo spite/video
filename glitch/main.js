@@ -131,7 +131,8 @@ function onResize() {
 }
 
 async function init() {
-  video = await initGum(2, initOffsets);
+  const res = await initGum(2, initOffsets);
+  video = res.video;
 
   const videoTexture = new VideoTexture(video);
   mesh.material.uniforms.map.value = videoTexture;
