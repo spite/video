@@ -1,15 +1,14 @@
-import { Gum } from "../modules/gum.js";
-import { FlowCalculator } from "../modules/oflow.js";
 import { OrthographicCamera, Scene, WebGLRenderer, Mesh } from "three";
+import {
+  init as initGum,
+  extractDifferences,
+  scale,
+} from "../modules/oflowcam.js";
 
-const gum = new Gum(
-  document.querySelector("#device"),
-  document.querySelector("#nextDeviceBtn")
-);
+let video;
 
 var mode = 1;
 
-var scale = 2;
 var fStep = scale;
 var wStep = fStep * fStep + 1;
 
@@ -27,7 +26,6 @@ var instructions = document.getElementById("instructions");
 instructions.style.display = "none";
 
 var size = 2,
-  video = document.getElementById("monitor"),
   canvas = document.getElementById("photo"),
   context = canvas.getContext("2d"),
   oCanvas = document.createElement("canvas"),
@@ -38,49 +36,60 @@ var size = 2,
   tCtx = tCanvas.getContext("2d");
 
 canvas.width = 0;
-var flow = new FlowCalculator(fStep);
 canvas.style.display = "none";
 var startTime;
 
 function start() {
-  // instructions.style.display = "block";
-
   oCanvas.style.display = "block";
   startTime = Date.now();
-  extractDifferences();
+  processFrame();
+}
+function processFrame() {
+  const { d, f } = extractDifferences();
+  if (d && d.u !== 0 && d.v !== 0) {
+    updateCanvas(d, f);
+  }
+  requestAnimationFrame(processFrame);
 }
 
 function updateCanvas(d, f) {
   var min = 2;
   var maxLife = 100;
-  for (var j = 0; j < d.zones.length; j++) {
-    if (Math.abs(d.zones[j].u) > min || Math.abs(d.zones[j].v) > min) {
+  for (const zone of d.zones) {
+    if (Math.abs(zone.u) > min || Math.abs(zone.v) > min) {
       balls.push({
-        x: d.zones[j].x,
-        y: d.zones[j].y,
-        u: d.zones[j].u,
-        v: d.zones[j].v,
-        ox: d.zones[j].x,
-        oy: d.zones[j].y,
+        x: zone.x,
+        y: zone.y,
+        u: zone.u,
+        v: zone.v,
+        ox: zone.x,
+        oy: zone.y,
         life: maxLife,
       });
     }
   }
 
-  const video = gum.video;
   fCtx.drawImage(video, 0, 0);
   fCtx.fillStyle = "#FFD285";
   fCtx.strokeStyle = "#FFD285";
   fCtx.save();
   fCtx.globalCompositeOperation = "lighter";
 
+  // const s = scale;
+  // for (const zone of d.zones) {
+  //   fCtx.beginPath();
+  //   fCtx.moveTo(zone.x * scale, zone.y * scale);
+  //   fCtx.lineTo(zone.x * scale + zone.u * s, zone.y * scale + zone.v * s);
+  //   fCtx.stroke();
+  // }
+
   for (var j = 0; j < balls.length; j++) {
     var b = balls[j];
     var ox = b.x;
     var oy = b.y;
-    b.x -= f * 0.5 * b.u;
-    b.y -= f * 0.5 * b.v;
-    b.v -= f * 0.098;
+    b.x -= f * 0.5 * b.u * scale;
+    b.y -= f * 0.5 * b.v * scale;
+    b.v -= f * 0.098 * scale;
     b.life -= f;
     if (b.life < 0) {
       balls.splice(j, 1);
@@ -92,7 +101,7 @@ function updateCanvas(d, f) {
     fCtx.arc(
       b.x * scale,
       b.y * scale,
-      0.05 * (maxLife - b.life),
+      0.05 * (maxLife - b.life) * scale,
       0,
       2 * Math.PI
     );
@@ -198,73 +207,6 @@ function updateParticlesII(d, f, data) {
   geometry2.verticesNeedUpdate = true;
   geometry2.colorsNeedUpdate = true;
   renderer.render(scene2, camera);
-}
-
-function extractDifferences() {
-  const video = gum.video;
-  if (
-    canvas.width != video.videoWidth / scale ||
-    canvas.height != video.videoHeight / scale
-  ) {
-    canvas.width = oCanvas.width = tCanvas.width = video.videoWidth / scale;
-    canvas.height = oCanvas.height = tCanvas.height = video.videoHeight / scale;
-    fCanvas.width = video.videoWidth;
-    fCanvas.height = video.videoHeight;
-    onResize();
-  }
-
-  try {
-    context.drawImage(
-      video,
-      0,
-      0,
-      video.videoWidth,
-      video.videoHeight,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-    if (canvas.width > 0 && canvas.height > 0) {
-      //stackBlurCanvasRGB( canvas, 0, 0, canvas.width, canvas.height, 10 );
-      tCtx.drawImage(canvas, 0, 0);
-    }
-
-    var iData = context.getImageData(0, 0, canvas.width, canvas.height);
-    var oData = oCtx.getImageData(0, 0, oCanvas.width, oCanvas.height);
-  } catch (e) {
-    requestAnimationFrame(extractDifferences);
-    return;
-  }
-
-  var p = iData.data.length / 4;
-  var buf = new ArrayBuffer(iData.data.length);
-  var oBuf = new ArrayBuffer(oData.data.length);
-  var buf8 = new Uint8ClampedArray(iData.data);
-  var oBuf8 = new Uint8ClampedArray(oData.data);
-
-  var d = flow.calculate(buf8, oBuf8, canvas.width, canvas.height);
-
-  var currentTime = Date.now();
-  var eTime = currentTime - startTime;
-  startTime = currentTime;
-  var f = eTime / 16;
-
-  switch (mode) {
-    case 1:
-      updateCanvas(d, f);
-      break;
-    case 2:
-      updateParticles(d, f, buf8);
-      break;
-    case 3:
-      updateParticlesII(d, f, buf8);
-      break;
-  }
-
-  oCtx.drawImage(tCanvas, 0, 0);
-
-  requestAnimationFrame(extractDifferences);
 }
 
 function initWebGL() {
@@ -413,10 +355,7 @@ for (var j = 0; j < a.length; j++) {
   });
 }
 
-window.addEventListener("resize", onResize);
-
 function onResize() {
-  const video = gum.video;
   var ar = window.innerHeight / window.innerWidth;
   var cr = video.videoHeight / video.videoWidth;
   var w, h;
@@ -450,9 +389,13 @@ function onResize() {
 }
 
 async function init() {
-  await gum.init();
-  await gum.ready();
+  video = await initGum(2);
   window.addEventListener("resize", onResize);
+
+  fCanvas.width = video.videoWidth;
+  fCanvas.height = video.videoHeight;
+
+  onResize();
   switchMode(1);
   start();
 }
