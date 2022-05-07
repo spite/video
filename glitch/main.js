@@ -82,23 +82,27 @@ function processFrame() {
 }
 
 function update(d) {
-  for (let j = 0; j < d.zones.length; j++) {
-    const z = d.zones[j];
-    const s = scale;
+  const s = scale;
+  const m = 0.5;
+  for (const z of d.zones) {
     const x = Math.round(z.x / s);
     const y = Math.round(z.y / s);
     const ptr = y * oW * 4 + x * 4;
 
-    const m = 0.95;
-    momentum[ptr] += z.u;
+    momentum[ptr] += z.u / scale;
     momentum[ptr] *= m;
-    momentum[ptr + 1] += z.v;
+    momentum[ptr + 1] += z.v / scale;
     momentum[ptr + 1] *= m;
 
     offsets[ptr] += momentum[ptr];
     offsets[ptr] *= 0.5;
     offsets[ptr + 1] += momentum[ptr + 1];
     offsets[ptr + 1] *= 0.5;
+
+    // offsets[ptr] += z.u;
+    // offsets[ptr] *= 0.9;
+    // offsets[ptr + 1] += z.v;
+    // offsets[ptr + 1] *= 0.9;
   }
 
   mesh.material.uniforms.offsetMap.value.needsUpdate = true;
