@@ -75,7 +75,7 @@ function start() {
 
 function processFrame() {
   const { d, f } = extractDifferences();
-  if (d) {
+  if (d && d.u !== 0 && d.v !== 0) {
     update(d);
   }
   requestAnimationFrame(processFrame);
