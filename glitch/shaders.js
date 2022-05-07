@@ -20,8 +20,9 @@ uniform sampler2D offsetMap;
 out vec4 color;
 
 void main() {
-  vec2 uv = vUv + .01 * texture(offsetMap, vUv).xy;
+  vec2 uv = vUv + .1 * texture(offsetMap, vUv).xy;
   color = texture(map, uv);
+  // color = vec4(.5 + texture(offsetMap, vUv).xy / 10., 0., 1.);
 }
 `;
 
