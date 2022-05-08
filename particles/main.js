@@ -75,13 +75,13 @@ function updateCanvas(d, f) {
   fCtx.save();
   fCtx.globalCompositeOperation = "lighter";
 
-  // const s = scale;
-  // for (const zone of d.zones) {
-  //   fCtx.beginPath();
-  //   fCtx.moveTo(zone.x * scale, zone.y * scale);
-  //   fCtx.lineTo(zone.x * scale + zone.u * s, zone.y * scale + zone.v * s);
-  //   fCtx.stroke();
-  // }
+  const s = scale;
+  for (const zone of d.zones) {
+    fCtx.beginPath();
+    fCtx.moveTo(zone.x * scale, zone.y * scale);
+    fCtx.lineTo(zone.x * scale + zone.u * s, zone.y * scale + zone.v * s);
+    fCtx.stroke();
+  }
 
   for (var j = 0; j < balls.length; j++) {
     var b = balls[j];
@@ -389,7 +389,8 @@ function onResize() {
 }
 
 async function init() {
-  video = await initGum(2);
+  const res = await initGum(8);
+  video = res.video;
   window.addEventListener("resize", onResize);
 
   fCanvas.width = video.videoWidth;
