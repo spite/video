@@ -70,6 +70,9 @@ async function init(s, onSourceResizeCb = onSourceResize) {
   onSourceResize = onSourceResizeCb;
   await gum.init();
   await gum.ready();
+  document.body.append(gum.video);
+  gum.video.style.opacity = "0";
+  gum.video.style.pointerEvents = "none";
   return { video: gum.video, canvas: newImage };
 }
 
