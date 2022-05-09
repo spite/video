@@ -28,11 +28,11 @@ let oW;
 let oH;
 
 function initOffsets(w, h) {
-  oW = w;
-  oH = h;
-  momentum = new Float32Array(w * h * 4);
-  offsets = new Float32Array(w * h * 4);
-  const offsetTexture = new DataTexture(offsets, w, h, RGBAFormat, FloatType);
+  oW = Math.floor(w / scale);
+  oH = Math.floor(h / scale);
+  momentum = new Float32Array(oW * oH * 4);
+  offsets = new Float32Array(oW * oH * 4);
+  const offsetTexture = new DataTexture(offsets, oW, oH, RGBAFormat, FloatType);
   offsetTexture.flipY = true;
   mesh.material.uniforms.offsetMap.value = offsetTexture;
 }
