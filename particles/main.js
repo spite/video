@@ -78,10 +78,13 @@ function updateCanvas(d, f) {
   const s = scale;
   for (const zone of d.zones) {
     fCtx.beginPath();
-    const x = zone.x * scale - 0.5 * scale;
-    const y = zone.y * scale - 0.5 * scale;
+    const x = zone.x;
+    const y = zone.y;
     fCtx.moveTo(x, y);
-    fCtx.lineTo(x + zone.u * s, y + zone.v * s);
+    fCtx.lineTo(x + zone.u, y + zone.v);
+    fCtx.stroke();
+    fCtx.beginPath();
+    fCtx.arc(x, y, scale, 0, 2 * Math.PI);
     fCtx.stroke();
   }
 
@@ -391,7 +394,7 @@ function onResize() {
 }
 
 async function init() {
-  const res = await initGum(4);
+  const res = await initGum(16);
   video = res.video;
   window.addEventListener("resize", onResize);
 
