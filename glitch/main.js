@@ -28,8 +28,9 @@ let oW;
 let oH;
 
 function initOffsets(w, h) {
-  oW = Math.floor(w / scale);
-  oH = Math.floor(h / scale);
+  const s = 2 * scale + 1;
+  oW = Math.floor(w / s);
+  oH = Math.floor(h / s);
   momentum = new Float32Array(oW * oH * 4);
   offsets = new Float32Array(oW * oH * 4);
   const offsetTexture = new DataTexture(offsets, oW, oH, RGBAFormat, FloatType);
@@ -82,7 +83,7 @@ function processFrame() {
 }
 
 function update(d) {
-  const s = scale;
+  const s = scale * 2 + 1;
   const m = 0.5;
   for (const z of d.zones) {
     const x = Math.round(z.x / s);
