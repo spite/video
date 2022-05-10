@@ -24,8 +24,9 @@ let onSourceResize = () => {};
 
 function extractDifferences() {
   const video = gum.video;
-  const roundWidth = Math.floor(video.videoWidth / scale) + 0.5 * scale;
-  const roundHeight = Math.floor(video.videoHeight / scale) + 0.5 * scale;
+  const s = 2 * scale;
+  const roundWidth = video.videoWidth; // Math.floor(video.videoWidth / s) * s;
+  const roundHeight = video.videoHeight; //Math.floor(video.videoHeight / s) * s;
   if (width != roundWidth || height != roundHeight) {
     width = roundWidth;
     height = roundHeight;
@@ -38,17 +39,7 @@ function extractDifferences() {
   let newImageData;
 
   try {
-    newImageContext.drawImage(
-      video,
-      0,
-      0,
-      video.videoWidth,
-      video.videoHeight,
-      0,
-      0,
-      width,
-      height
-    );
+    newImageContext.drawImage(video, 0, 0);
 
     oldImageData = oldImageContext.getImageData(0, 0, width, height);
     newImageData = newImageContext.getImageData(0, 0, width, height);
@@ -65,7 +56,7 @@ function extractDifferences() {
 
 async function init(s, onSourceResizeCb = onSourceResize) {
   scale = s;
-  flow = new FlowCalculator(scale / 2);
+  flow = new FlowCalculator(scale);
   onSourceResize = onSourceResizeCb;
   await gum.init();
   await gum.ready();
