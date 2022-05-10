@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>RGB</title>
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@thespite" />
+    <meta name="twitter:title" content="RGB" />
+    <meta
+      name="twitter:description"
+      content="An experiment simulating video compression glitches to a video using WebRTC getUserMedia"
+    />
+    <meta name="twitter:creator" content="@thespite" />
+    <meta
+      name="twitter:image:src"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-28.jpg"
+    />
+
+    <!-- Open Graph data -->
+    <meta property="og:type" content="demo" />
+    <meta
+      property="og:image"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-28.jpg"
+    />
+    <meta
+      property="og:description"
+      content="An experiment simulating video compression glitches to a video using WebRTC getUserMedia"
+    />
+    <meta property="og:site_name" content="Clicktorelease" />
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <link href="./styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="info">
+      <h2>WebRTC getUserMedia</h2>
+      <h1>RGB Shift</h1>
+      <p>
+        An experiment simulating RGB shifting using WebRTC<br />getUserMedia,
+        optical flow and GLSL shaders .
+      </p>
+      <p>
+        Made using
+        <a rel="external" href="https://threejs.org/">three.js</a> and
+        <a rel="external" href="https://github.com/anvaka/oflow">oflow.js</a>.
+      </p>
+      <p>
+        Get the source code on
+        <a rel="external" href="https://github.com/spite/video/tree/main/glitch"
+          >GitHub</a
+        >.
+      </p>
+      <p>
+        <span id="device"></span>&nbsp;
+        <button id="nextDeviceBtn">Next</button>
+      </p>
+    </div>
+    <footer>
+      <p><button>Prev</button><button>Next</button></p>
+    </footer>
+    <div id="container"></div>
+  </body>
+  <!-- <script
+    async
+    src="https://unpkg.com/es-module-shims@1.5.4/dist/es-module-shims.js"
+  ></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../modules/three.js",
+        "oflow": "../modules/oflow.js"
+      }
+    }
+  </script> -->
+  <script src="../modules/utils.js" type="module"></script>
+  <script src="main.js" type="module"></script>
+</html>
