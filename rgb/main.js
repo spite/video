@@ -10,13 +10,14 @@ import {
   Mesh,
   DataTexture,
   GLSL3,
-} from "../modules/three.js";
+} from "../third_party/three.js";
 import { vertexShader, fragmentShader } from "./shaders.js";
 import {
   init as initGum,
   extractDifferences,
   scale,
 } from "../modules/oflowcam.js";
+import { blur } from "../modules/blur.js";
 
 let video;
 
@@ -99,6 +100,10 @@ function update(d) {
     offsets[ptr] *= 0.5;
     offsets[ptr + 1] += momentum[ptr + 1];
     offsets[ptr + 1] *= 0.5;
+  }
+
+  for (let i = 0; i < 5; i++) {
+    blur(offsets, oW, oH, 10);
   }
 
   mesh.material.uniforms.offsetMap.value.needsUpdate = true;
