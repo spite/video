@@ -29,7 +29,7 @@ void main() {
   vec4 g = texture(map, uvg);
   vec4 b = texture(map, uvb);
   color = vec4(r.r, g.g, b.b, 1.);
-  // color = vec4(.5 + texture(offsetMap, vUv).xy / 10., 0., 1.);
+  color = vec4(.5 + texture(offsetMap, vUv).xy / 10., 0., 1.);
 }
 `;
 
