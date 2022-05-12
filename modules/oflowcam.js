@@ -1,4 +1,4 @@
-import { FlowCalculator } from "./oflow.js";
+import { FlowCalculator } from "../third_party/oflow.js";
 import { Gum } from "./gum.js";
 
 let flow;

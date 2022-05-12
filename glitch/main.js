@@ -10,7 +10,7 @@ import {
   Mesh,
   DataTexture,
   GLSL3,
-} from "../modules/three.js";
+} from "../third_party/three.js";
 import { vertexShader, fragmentShader } from "./shaders.js";
 import {
   init as initGum,
